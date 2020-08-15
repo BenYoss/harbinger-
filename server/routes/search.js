@@ -7,7 +7,6 @@ const { saveOrFindKeyWord, findArticleByKeyWord } = require('../db/database');
 // const azure = require('server/azure.js');
 const searchRoute = Router();
 const { webSearchApiClient } = require('../azure.js');
-const { Console } = require('console');
 
 // findArticleByKeyWord('apple.com');
 

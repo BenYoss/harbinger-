@@ -20,18 +20,20 @@ homeRoute.get('/', (req, res) => {
 
 homeRoute.get('/api/users', (req, res) => {
   console.log('GET should hit!!');
-  getUsers().then((data) => {
-    res.status(200).send(data);
-  })
+  getUsers()
+    .then((data) => {
+      res.status(200).send(data);
+    })
     .catch((err) => console.error(err));
 });
 
 homeRoute.post('/api/users', (req, res) => {
-  console.log(req.body);
-  saveUsers(req.body).then(() => {
-    console.log('users have been saved');
-    res.end();
-  })
+  //console.log(req.body);
+  saveUsers(req.body)
+    .then(() => {
+      console.log('users have been saved');
+      res.end();
+    })
     .catch((err) => console.error(err));
 });
 

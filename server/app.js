@@ -13,6 +13,7 @@ const { homeRoute } = require('./routes/home');
 const { profileRoute } = require('./routes/profile');
 const { loginRoute } = require('./routes/login');
 const { reviewRoute } = require('./routes/review');
+const { userProfile } = require('./routes/userProfile');
 const { getUser } = require('./db/database');
 
 app.use(cors());
@@ -35,6 +36,9 @@ app.use('/api/websites', searchRoute);
 app.use('/profile', profileRoute);
 // app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
 app.use('/review', reviewRoute);
+app.use('/user', userProfile);
+
+
 let loggedin = false;
 // app.use()
 // video @ 12:37 is logged in function
@@ -89,9 +93,12 @@ app.get('/logout', (req, res) => {
   req.session = null;
   req.logout();
   // redirect them to login page?
+  console.log('hit logout')
   loggedin = false;
   res.redirect('/google');
 });
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
