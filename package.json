@@ -4,6 +4,7 @@
   "description": "Upvote and comment on your favorite websites!",
   "main": "index.js",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "axios": "^0.19.2",
     "azure-cognitiveservices-websearch": "^2.0.0",
     "body-parser": "^1.19.0",

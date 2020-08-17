@@ -1,20 +1,24 @@
 const { Router } = require('express');
-const { getUserReviews } = require('../db/database');
+const { getUserReviews, findTopReviews } = require('../db/database');
 require('../db/database');
 const userProfile = Router();
 
-userProfile.get('/:user', (req, res) => {
-  let username = req.params.user;
-  // username is now equal to the user name
-  // I can query my db using this and retrieve
-  // their name
-  // here we will grab info from the DB for a single user profile and render it to the page
+userProfile.post('/:user', (req, res) => {
+  let username = req.body.username;
   if (req.user) {
-    console.log(username);
+    //console.log(req.body, 'username');
     res.status(201);
-    getUserReviews(username).then((data) => res.send(data));
+    getUserReviews(username).then((data) => {
+      //console.log(data);
+      findTopReviews({ where: { id_user: data[0].dataValues.id_user} })
+        .then((data) => {
+          console.log('I AM DEHDDJDSK', data);
+          
+          res.send(data);
+        })
+        .catch((err) => console.error(err));
+    });
 
-    //res.send('profile GET');
   } else {
     res.status(401);
     res.send('unauthorized');

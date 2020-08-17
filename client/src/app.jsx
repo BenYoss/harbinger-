@@ -6,6 +6,10 @@ import Profile from './profile.jsx';
 import Reviews from './reviews.jsx';
 import Search from './search.jsx';
 import UserProfile from './userProfile.jsx';
+import { styled, Backdrop } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Toolbar from '@material-ui/core/Toolbar';
+import Box from '@material-ui/core/Box';
 
 function App() {
   return (

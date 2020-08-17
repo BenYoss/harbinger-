@@ -164,91 +164,13 @@ Keyword.sync();
 // TESTING TO SEE IF I CAN FIX DB LINKS
 Review.belongsTo(Users, { foreignKey: 'id_user' });
 
-// const findArticleByKeyWord = (keyword) =>
-//   Keyword.findOne({ where: { keyword } })
-//   .then((data) => {
-//     if (data === null) {
-//       console.log('keyword not found');
-//       return;
-//     } else {
-//       console.log('hello')
-//     };
-
-// let test;
-const findArticleByKeyWord = (keyword) =>
-  Keyword.findOne({ where: { keyword } }).then((data) => {
-    if (data === null) {
-      console.log('no keyword found');
-    } else {
-      return Review.findAll({
-        where: {
-          id_keyword: data.id,
-        },
-        include: [
-          {
-            model: Users,
-            required: true,
-          },
-        ],
-      })
-        .then((data) => {
-          //console.log(typeof data);
-          //console.log(data);
-          return data;
-        })
-        .catch((err) => console.log(err, 'SOMETHING WENT WRONG'));
-    }
-  });
-
-// let articles = findArticleByKeyWord('apple.com');
-// console.log(articles, 'ARTICLESSSSSSS');
-
-const saveOrFindKeyWord = (keyword) =>
-  Keyword.findOne({ where: { keyword } })
-    .then((data) => {
-      if (data === null) {
-        console.log('keyword created!!!');
-        return Keyword.create({ keyword });
-      }
-      return data;
-    })
-    .catch((err) => console.log(err));
-
-const saveOrFindWebUrl = (url) =>
-  WebUrls.findOne({ where: { url } })
-    .then((data) => {
-      if (data === null) {
-        console.log('webURL created!');
-        return WebUrls.create({ url });
-      }
-      return data;
-    })
-    .catch((err) => console.log(err));
-
-const saveUsers = (username, serial, bio, image) =>
-  Users.findOne({ where: { serial } }).then((data) => {
-    if (data === null) {
-      return Users.create({
-        username,
-        serial,
-        bio,
-        image,
-      });
-    }
-    //console.log(data);
-    console.log('entry already exists');
-  });
-
-const getUser = (id) => Users.findOne({ where: { serial: id } });
-
-// for loading profiles
-// this finds the user name first
-// then we can find all reviews by them once we have that data
-const getUserReviews = (name) =>
-  Users.findOne({ where: { username: name } }).then((data) => {
+const findArticleByKeyWord = (keyword) => Keyword.findOne({ where: { keyword } }).then((data) => {
+  if (data === null) {
+    console.log('no keyword found');
+  } else {
     return Review.findAll({
       where: {
-        id_user: data.id,
+        id_keyword: data.id,
       },
       include: [
         {
@@ -257,11 +179,58 @@ const getUserReviews = (name) =>
         },
       ],
     })
-      .then((data) => {
-        return data;
-      })
+      .then((data) =>
+        data)
       .catch((err) => console.log(err, 'SOMETHING WENT WRONG'));
-  });
+  }
+});
+
+const saveOrFindKeyWord = (keyword) => Keyword.findOne({ where: { keyword } })
+  .then((data) => {
+    if (data === null) {
+      console.log('keyword created!!!');
+      return Keyword.create({ keyword });
+    }
+    return data;
+  })
+  .catch((err) => console.log(err));
+
+const saveOrFindWebUrl = (url) => WebUrls.findOne({ where: { url } })
+  .then((data) => {
+    if (data === null) {
+      console.log('webURL created!');
+      return WebUrls.create({ url });
+    }
+    return data;
+  })
+  .catch((err) => console.log(err));
+
+const saveUsers = (username, serial, bio, image) => Users.findOne({ where: { serial } }).then((data) => {
+  if (data === null) {
+    return Users.create({
+      username,
+      serial,
+      bio,
+      image,
+    });
+  }
+});
+
+const getUser = (id) => Users.findOne({ where: { serial: id } });
+
+const getUserReviews = (name) => Users.findOne({ where: { username: name } }).then((data) => Review.findAll({
+  where: {
+    id_user: data.id,
+  },
+  include: [
+    {
+      model: Users,
+      required: true,
+    },
+  ],
+})
+  .then((data) => data)
+  .catch((err) => console.log(err, 'SOMETHING WENT WRONG')));
 
 const saveReview = (username, title, text, weburl, keyword) => {
   let idUser;
@@ -278,7 +247,7 @@ const saveReview = (username, title, text, weburl, keyword) => {
             likes: 0,
             dislike: 0,
             id_user: idUser,
-            title: title,
+            title,
             text,
             id_web: idWeb,
             id_keyword: idKeyword,
@@ -290,20 +259,14 @@ const saveReview = (username, title, text, weburl, keyword) => {
   });
 };
 
-// saveReview('Sebastian', 'this is just a TEST', 'www.boop.com', 'boop');
-
-const findUserAndUpdateBio = (serial, bio) =>
-  Users.findOne({ where: { serial } }).then((user) =>
-    user
-      .update({ bio })
-      .then((data) => data)
-      .catch((err) => console.log(err))
-  );
-const findUserAndUpdateImage = (serial, image) =>
-  Users.findOne({ where: { serial } })
-    .then((user) => user.update({ image }))
-    .then((data) => data)
-    .catch((err) => console.log(err));
+const findUserAndUpdateBio = (serial, bio) => Users.findOne({ where: { serial } }).then((user) => user
+  .update({ bio })
+  .then((data) => data)
+  .catch((err) => console.log(err)));
+const findUserAndUpdateImage = (serial, image) => Users.findOne({ where: { serial } })
+  .then((user) => user.update({ image }))
+  .then((data) => data)
+  .catch((err) => console.log(err));
 
 const findTopReviews = (query) => {
   const sendArr = [];
@@ -311,8 +274,8 @@ const findTopReviews = (query) => {
   const usernames = [];
   let webIds;
   const webUrls = [];
-  let keywords;
-  // have sorting featue 1.find, sort by like, limit 5/10
+  const images = [];
+
   return Review.findAll(query).then((data) => {
     sortedData = data.sort((a, b) => b.likes - a.likes);
     sendArr.push(data);
@@ -323,11 +286,11 @@ const findTopReviews = (query) => {
         id: userIds,
       },
     }).then((data) => {
-      // console.log(data[0].dataValues.username, 'THIS IS THE DATA');
       userIds.forEach((userId) => {
         data.forEach((userObj) => {
           if (userObj.dataValues.id === userId) {
             usernames.push(userObj.dataValues.username);
+            images.push(userObj.dataValues.image);
           }
         });
       });
@@ -336,7 +299,6 @@ const findTopReviews = (query) => {
           id: webIds,
         },
       }).then((data) => {
-        // console.log(data[0].dataValues.username, 'THIS IS THE DATA');
         webIds.forEach((webId) => {
           data.forEach((webObj) => {
             if (webObj.dataValues.id === webId) {
@@ -345,43 +307,49 @@ const findTopReviews = (query) => {
           });
         });
         console.log(webUrls);
-        return [usernames, ...sendArr, webUrls];
-        // return sendArr;
+        return [usernames, ...sendArr, webUrls, images];
       });
-      // console.log(sendArr);
-      // return [usernames, ...sendArr];
-      // return sendArr;
     });
   });
 };
 
-const updateLikeInReview = (reviewId) =>
-  new Promise((resolve, reject) => {
-    Review.findOne({ where: { id: reviewId } })
-      .then((review) => {
-        const { likes } = review;
-        review.update({ likes: likes + 1 }).then(() => {
-          resolve();
-        });
-      })
-      .catch(() => {
-        reject();
+const updateLikeInReview = (reviewId) => new Promise((resolve, reject) => {
+  Review.findOne({ where: { id: reviewId } })
+    .then((review) => {
+      const { likes } = review;
+      review.update({ likes: likes + 1 }).then(() => {
+        resolve();
       });
-  });
+    })
+    .catch(() => {
+      reject();
+    });
+});
 
-const updateDislikeInReview = (reviewId) =>
-  new Promise((resolve, reject) => {
-    Review.findOne({ where: { id: reviewId } })
-      .then((review) => {
-        const { dislike } = review;
-        review.update({ dislike: dislike + 1 }).then(() => {
-          resolve();
-        });
-      })
-      .catch(() => {
-        reject();
+const updateDislikeInReview = (reviewId) => new Promise((resolve, reject) => {
+  Review.findOne({ where: { id: reviewId } })
+    .then((review) => {
+      const { dislike } = review;
+      review.update({ dislike: dislike + 1 }).then(() => {
+        resolve();
       });
-  });
+    })
+    .catch(() => {
+      reject();
+    });
+});
+
+const findUserAndUpdateUsername = (serial, username) => Users.findOne({ where: { serial } }).then((user) => user
+  .update({ username })
+  .then((data) => data)
+  .catch((err) => console.log(err)));
+
+const getWebUrls = (webIds) => WebUrls.findAll({
+  where: {
+    id: webIds,
+  },
+});
+
 
 module.exports = {
   db,
@@ -397,4 +365,6 @@ module.exports = {
   updateLikeInReview,
   updateDislikeInReview,
   getUserReviews,
+  findUserAndUpdateUsername,
+  getWebUrls,
 };
