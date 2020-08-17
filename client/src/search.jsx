@@ -81,6 +81,33 @@ function Search() {
     color: 'black',
   });
 
+  const LikeBG = styled(Box)({
+    borderRadius: 3,
+    height: 200,
+    boxShadow: '0 3px 4px 2px gray',
+    backgroundColor: '#9ACD32',
+    color: 'black',
+  });
+
+  const DikeBG = styled(Box)({
+    borderRadius: 3,
+    height: 200,
+    boxShadow: '0 3px 4px 2px gray',
+    backgroundColor: '#F08080',
+  });
+
+  const ImageBG = styled(Box)({
+    borderRadius: 7,
+    boxShadow: '0 1px 30px 0px gray',
+    backgroundColor: '#FAEBD7',
+    color: 'black',
+  });
+
+  const TitleBox = styled(Box)({
+    background: 'linear-gradient(45deg, #FE6534 30%, #FCD98D 90%)',
+    borderRadius: 7,
+    color: 'black',
+  });
   const [webSites, webSitesUpdate] = useState([]);
   const [reviewedSites, reviewedSitesUpdate] = useState([]);
   // const [userInfo, userInfoUpdate] = useState([
@@ -130,38 +157,80 @@ function Search() {
         </div>
         <div className="reviewedSites list">
           {reviewedSites.map((review) => (
-            <div key={review.id}>
-              <br />
-              <div>
-                Written By:
-                {review.User.username || 'Jim'}
-                URL:
-                {review.webUrl}
-              </div>
-              <Link
-                to={{
-                  pathname: `/userProfile/name=${review.User.username}`,
-                }}
-              >
-                <button>
-                  {review.User.username || 'Jim'}
-                  's Profile
-                </button>
-              </Link>
-              <img src={review.User.image} width="5%" height="5%" />
-              <div>
-                Likes:
-                {review.likes}
-              </div>
-              <div>
-                {' '}
-                Dislikes:
-                {review.dislike}
-              </div>
-              <br />
-              <div>{review.text}</div>
-              <button>See Review</button>
-            </div>
+  <div>
+  <ImageBG width="200" style={{ maxWidth: "500px" }}>
+  <div >
+  <img src={review.User.image} style={{ position: 'absolute', marginBottom: "20px", boxShadow: '0 3px 10px 2px gray', }} width='150px'
+height='150px'/>
+  <TitleBox>
+  <h1 style={{ marginLeft: "200px", padding: "0px", color: "white"}}>{review.title}</h1>
+  </TitleBox>
+  {/* <h4 style={{ marginLeft: "170px", padding: "0px"}}> Written By: {review.username}</h4> */}
+  <Link
+to={{
+  pathname: `/userProfile/name=${review.User.username}`,
+}}
+><h3 style={{ marginLeft: "170px", padding: "0px", color: 'black',}}>
+  {review.User.username || 'Jim'}
+</h3>
+</Link>
+  <a href={review.webUrl} style={{ marginLeft: "170px", padding: "0px"}}>{review.webUrl}</a>
+  <div style={{ padding: "20px"}}>
+  <div style={{ display: 'inline-block', marginLeft: "20px" }}>
+  <LikeBG style={{ maxHeight: "20px", maxWidth: "400px", color: "white" }}>
+  <h4 style={{ }}>
+    Likes:
+  {review.likes}
+  </h4>
+  </LikeBG>
+  <DikeBG style={{ maxHeight: "20px", maxWidth: "400px", color: "white" }}>
+  <h4>
+    {' '}
+  Dislikes:
+  {review.dislike}
+  </h4>
+  </DikeBG>
+  </div>
+  {/* <div style={{ maxWidth: "700px", marginLeft: "50px", marginBottom: "30px", positon: "absolute", padding: "12px", display: 'inline-block' }}>{review.text}</div> */}
+  </div>
+  <img height="10" style={{marginTop: "20px"}}></img>
+  </div>
+  </ImageBG>
+  <button
+    type="submit"
+    onClick={() => {
+      if (count === 0) {
+        updateLike(review.id, 'like');
+        count = +1;
+      };
+
+    }}
+  >
+    <MyButton>
+    like
+    </MyButton>
+</button>
+  <button
+    type="submit"
+    onClick={() => {
+      if (count === 0) {
+        updateLike(review.id, 'dislike');
+        count = +1;
+      };
+
+    }}
+  ><MyButton>
+    dislike
+  </MyButton>
+</button>
+<Link
+to={{
+  pathname: `/review/site=${review.webUrl}`,
+  }}
+>
+  <button>See Review</button>
+</Link>
+</div>
           ))}
         </div>
         <div className="webSitesList">

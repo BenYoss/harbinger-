@@ -164,9 +164,9 @@ function HomePage() {
         </Background>
       </div>
       <Search />
-      <h3 style={{ display: 'inline-block' }}>
-        Top Best Reviews
-      </h3>
+      <Background style={{ color:"white", marginLeft: "600px" }}>
+        <h2>Top Best Reviews</h2>
+      </Background>
       {topReviews.map((review) => {
         let count = 0;
         return (

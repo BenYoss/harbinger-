@@ -181,6 +181,7 @@ function Reviews(props) {
           </div>
           )
       })}
+      <div style={{ marginLeft: "500px", backgroundColor: '#9ACD32' }}>
       <h1>Reviews Component</h1>
       <input id="title" type="text" placeholder="leave a title" />
       <br />
@@ -197,6 +198,7 @@ function Reviews(props) {
         <br></br>
         <button style={{ marginBottom: "50px" }}><MyButton>Submit Review</MyButton></button>
       </form>
+      </div>
     </div>
   );
 }
