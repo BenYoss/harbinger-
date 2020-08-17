@@ -183,9 +183,8 @@ function HomePage() {
         to={{
           pathname: `/userProfile/name=${review.username}`,
         }}
-        ><h4 style={{ marginLeft: "170px", padding: "0px"}}>
+        ><h4 style={{ marginLeft: "170px", padding: "0px", color: "black"}}>
           {review.username || 'Jim'}
-            's Profile
       </h4>
       </Link>
           <a href={review.webUrl} style={{ marginLeft: "170px", padding: "0px"}}>{review.webUrl}</a>
